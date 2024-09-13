@@ -19,7 +19,7 @@
         }
  
         const formData = {
-            UserName: Username,
+            Username: Username,
             FirstName: Firstname,
             LastName: Lastname,
             BirthDate: BirthDate,
@@ -28,6 +28,7 @@
             Password: Password,
             ConfirmPassword: ConfirmPassword
         };
+ console.log(formData);
  
         try {
             const response = await fetch('http://localhost:8080/register', {

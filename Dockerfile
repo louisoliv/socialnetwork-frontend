@@ -1,20 +1,11 @@
-FROM node:lts-slim as build
+FROM node:latest
 
-WORKDIR /app
+WORKDIR /socialnetwork-frontend
 
-COPY package*.json ./
-RUN rm -rf node_modules
-RUN rm -rf build
 COPY . .
+
 RUN npm install
-RUN npm run build
 
-FROM node:lts-slim as run
+EXPOSE 3000
 
-WORKDIR /app
-COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/build ./build
-RUN npm install --production
-
-EXPOSE 8080
-ENTRYPOINT [ "npm", "run", "start" ]
+CMD ["tail", "-f", "/dev/null"]
