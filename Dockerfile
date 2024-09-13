@@ -1,11 +1,26 @@
-FROM node:latest
+# Utiliser une image Node.js officielle comme image de base
+FROM node:18-alpine
 
-WORKDIR /socialnetwork-frontend
+# Définir le répertoire de travail à l'intérieur du conteneur
+WORKDIR /app
 
-COPY . .
+# Copier les fichiers package.json et package-lock.json dans le répertoire de travail
+COPY package*.json ./
 
+# Installer les dépendances
 RUN npm install
 
-EXPOSE 3000
+# Copier le reste des fichiers de l'application
+COPY . .
 
-CMD ["tail", "-f", "/dev/null"]
+# Builder l'application Svelte
+RUN npm run build
+
+# Installer un serveur HTTP simple pour servir les fichiers
+RUN npm install -g serve
+
+# Exposer le port que l'application va utiliser
+EXPOSE 5000
+
+# Commande pour démarrer l'application
+CMD ["serve", "-s", "public"]
