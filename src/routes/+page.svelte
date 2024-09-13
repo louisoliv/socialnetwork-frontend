@@ -31,10 +31,13 @@
         }
 
        try {
-           const response = await fetch('http://localhost:5173/register', {
+           const response = await fetch('http://localhost:8080/register', {
                method: 'POST',
-               body: formData
-           });
+               headers: {
+                'Content-Type': 'application/json' 
+            },
+               body: JSON.stringify(formData)
+           }); 
 
            if (response.ok) {
                const result = await response.json();
