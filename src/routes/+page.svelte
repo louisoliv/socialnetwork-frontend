@@ -42,7 +42,7 @@
                 const result = await response.json();
                 console.log('Registration successful:', result);
                 // Redirect to a different page or perform other actions
-                goto('/success');
+               // goto('/success');
             } else {
                 console.error('Failed to register');
             }
