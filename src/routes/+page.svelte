@@ -51,7 +51,7 @@
    }
 
 </script>
-<form class="flex flex-col p-5 w-auto md:w-auto sm:w-auto lg-[25vw]">
+<form class="flex flex-col p-5 w-auto md:w-auto sm:w-auto lg-[25vw]" on:submit={handleSubmit}>
     <div class="flex m-3 text-blue-500 text-3xl font-bold text-left">Create an account</div>
     
     <input
@@ -114,5 +114,5 @@
         bind:value={ConfirmPassword}
     />
 
-    <button class="ml-auto m-3 p-1 border-2 rounded-md bg-blue-500 text-white w-40" on:click={handleSubmit}>Sign up baby</button>
+    <button class="ml-auto m-3 p-1 border-2 rounded-md bg-blue-500 text-white w-40">Sign up baby</button>
 </form>
