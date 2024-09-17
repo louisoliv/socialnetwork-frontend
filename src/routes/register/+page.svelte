@@ -1,6 +1,9 @@
 <script>
     import { goto } from '$app/navigation'; // Import the SvelteKit navigation function
- 
+    import Header from '../Header.svelte';
+
+
+    // Creating variables to store data 
     let Password = '';
     let ConfirmPassword = '';
     let Username = '';
@@ -10,14 +13,22 @@
     let Mail = '';
     let SelectGender = '';
  
+    /**
+     * Function to send data to the back end server in go
+     *
+     * Fetch the data and wait the response after the check in go
+     * @param event
+     */
     async function handleSubmit(event) {
         event.preventDefault(); // Prevent the default form submission
  
+        // Check if both password and ConfirmPassword are the same
         if (Password !== ConfirmPassword) {
             console.error('Passwords do not match');
             return;
         }
  
+        // Const to store the data from the user
         const formData = {
             Username: Username,
             FirstName: Firstname,
@@ -43,7 +54,9 @@
                 const result = await response.json();
                 console.log('Registration successful:', result);
                 if (result.hasOwnProperty("Success")) {
+                // Print in the console the data if the registration has been a success
                 console.log('File and data uploaded successfully:', result);
+                //Reset of the variables
                  Password = '';
                  ConfirmPassword = '';
                  Username = '';
@@ -63,7 +76,10 @@
         }
     }
  </script>
- 
+    <!--Call Header component  -->
+	<Header />
+
+ <div class="flex justify-center">
  <form class="flex flex-col p-5 w-auto md:w-auto sm:w-auto lg:w-[25vw]" on:submit={handleSubmit}>
      <div class="flex m-3 text-blue-500 text-3xl font-bold text-left">Create an account</div>
  
@@ -132,4 +148,5 @@
          Sign up baby
      </button>
  </form>
+ </div>
  

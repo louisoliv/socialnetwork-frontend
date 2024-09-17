@@ -1,6 +1,9 @@
 <script> 
    import { goto } from '$app/navigation'; // Import the SvelteKit navigation function
+   import Header from './Header.svelte';
 
+
+    // Creating variables to get the data from the user 
    let valueMail;
    let valuePassword
    let disabled = true
@@ -13,11 +16,6 @@
         Password: valuePassword
         }
 
-
-        //  for (let [key, value] of formDataLogin.entries()) {
-        //     console.log(`${key}: ${value}`);
-        // }
-
        try {
            const response = await fetch('http://localhost:8080/login', {
                method: 'POST',
@@ -28,6 +26,7 @@
                const result = await response.json();
                 if (result.hasOwnProperty("Success")) {
                 console.log('File and data uploaded successfully:', result);
+                //Setting the cookie if the user is already registered
                 document.cookie = `sessionId=${result.sessionId}; path=/`;
                 valueMail = "";
                 valuePassword = "";
@@ -50,7 +49,12 @@
 <svelte:head>
 	<title>Home</title>
 	<meta name="description" content="Svelte demo app" />
+
+    
 </svelte:head>
+
+	<Header />
+
 
 <section>
     <form class="flex flex-col p-5 w-auto md:w-auto sm:w-auto lg-[25vw]" on:submit={handleLogin}>
