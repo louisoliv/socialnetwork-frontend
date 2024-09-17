@@ -30,7 +30,7 @@
                 document.cookie = `sessionId=${result.sessionId}; path=/`;
                 valueMail = "";
                 valuePassword = "";
-                goto('/blog');
+                goto('/home');
                } else {
                 return
                }
@@ -91,8 +91,17 @@
             >
                 <button id="ToRegisterButton">Register</button>
             </a>
+
+            <a
+                href="/home"
+                class="m-3 p-1 justify-center flex no-underline hover:no-underline border-2 rounded-md bg-blue-500 text-white"
+            >
+                <button id="ToRegisterButton">Access to blog</button>
+            </a>
+
         </div>
-    </form></section>
+    </form>
+</section>
 
 <style>
 	section {
