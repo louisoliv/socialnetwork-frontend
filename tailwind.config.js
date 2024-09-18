@@ -2,8 +2,11 @@
 export default {
   content: ["./src/**/*.{html,js,svelte,ts,svg}"],
   theme: {
-    extend: {},
+    extend: {
+      scale: {
+        103: "1.03",
+      },
+    },
   },
   plugins: [],
 };
-
