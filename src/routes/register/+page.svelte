@@ -12,6 +12,60 @@
     let BirthDate = '';
     let Mail = '';
     let SelectGender = '';
+    let imageSrc = ""
+    let imageFile;
+    let imageContent = ''; // Variable to hold the file content
+
+
+    function handleFileChange(event) {
+        const [file] = event.target.files;
+        if (file) {
+            imageFile = file;
+            console.log('File Name:', file.name); 
+            console.log('File Type:', file.type);  // Logs the file type
+            console.log('File Size:', file.size);  // Logs the file size in bytes
+
+            // Use FileReader to read the content of the file
+            const reader = new FileReader();
+            reader.onload = () => {
+                imageContent = reader.result; // This contains the base64 encoded content or raw content
+                console.log('File Content:', imageContent); // You can also use this to preview the image
+                console.log(imageContent.length); // You can also use this to preview the image
+                decodeImage(imageContent, document.getElementById("image")) // The second argument necessary refers to an image tag !!
+            };
+            reader.readAsDataURL(file); // Reads the file as a data URL
+        }
+    }
+
+
+    function decodeImage(base64Image, imageDiv) {
+
+        // Step 1: Extract the Base64 data
+        base64Image = base64Image.split(',')[1]; // Get only the Base64 part
+
+        // Step 2: Decode the Base64 string
+        const binaryString = atob(base64Image);
+
+        // Step 3: Convert the binary string to a Uint8Array
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+
+        // Optional: Create a Blob object for the image
+        const blob = new Blob([bytes], { type: 'image/jpeg' });
+
+        // Display the image in an <img> element
+        const url = URL.createObjectURL(blob);
+        imageDiv.src = url;
+
+        // Clean up the object URL after use
+        imgElement.onload = function() {
+            URL.revokeObjectURL(url);
+        };
+    }
+
  
     /**
      * Function to send data to the back end server in go
@@ -37,9 +91,12 @@
             Email: Mail,
             Gender: SelectGender,
             Password: Password,
-            ConfirmPassword: ConfirmPassword
+            ConfirmPassword: ConfirmPassword,
+            ProfilePicture: imageSrc
         };
         console.log(formData);
+        console.log(imageSrc);
+
  
         try {
             const response = await fetch('http://localhost:8080/register', {
@@ -65,6 +122,7 @@
                  BirthDate = '';
                  Mail = '';
                  SelectGender = '';
+                 ProfilePicture = '';
                 goto('/');
                } else {
                 return
@@ -75,13 +133,14 @@
         } catch (error) {
             console.error('Error during registration:', error);
         }
-    }
+
+}
  </script>
     <!--Call Header component  -->
 	<Header />
 
  <div class="flex justify-center">
- <form class="flex flex-col p-5 w-auto md:w-auto sm:w-auto lg:w-[25vw]" on:submit={handleSubmit}>
+ <form class="flex flex-col p-5 w-auto md:w-auto sm:w-auto lg:w-[25vw]" on:submit={handleSubmit} enctype="multipart/form-data">
      <div class="flex m-3 text-blue-500 text-3xl font-bold text-left">Create an account</div>
  
      <input
@@ -144,10 +203,27 @@
          placeholder="Confirm Password"
          bind:value={ConfirmPassword}
      />
+
+    <div id="imageDiv" class="flex flex-col items-center m-3 relative">
+            <img id="image" src="./default_image.png" alt="avatar pic" class="flex justify-center w-32 h-32 object-cover rounded-full" />
+
+            <input
+                type="file"
+                accept="image/*"
+                id="userFile"
+                name="image"
+                class="p-1.5 text-sm hidden"
+                on:change={handleFileChange}
+            />
+            <label id="labelIcon" for="userFile" class="absolute top-2 right-10 text-white bg-cyan-500 w-7 h-7 flex items-center justify-center rounded-full text-lg cursor-pointer">
+              <span class="material-symbols-outlined"> photo_camera </span>
+            </label>
+        </div>
  
      <button type="submit" class="ml-auto m-3 p-1 border-2 rounded-md bg-blue-500 text-white w-40">
          Sign up baby
      </button>
  </form>
  </div>
+
  
