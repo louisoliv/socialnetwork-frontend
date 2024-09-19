@@ -65,6 +65,7 @@
                  BirthDate = '';
                  Mail = '';
                  SelectGender = '';
+                goto('/');
                } else {
                 return
                }
