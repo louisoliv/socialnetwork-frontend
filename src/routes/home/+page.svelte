@@ -1,10 +1,13 @@
 <script>
+   import { goto } from '$app/navigation'; // Import the SvelteKit navigation function
+
     let users = [];
     let posts = []
     let comments = []
     let selectedPostComments = []; 
     let albums = [];
     let photos = [];
+
 
     // Fetch data when the component is mounted
     const fetchUsers = async () => {
@@ -33,11 +36,55 @@
         photos = await response.json();
     };
 
+
+    function getCookieValue() {
+        let theCookies = document.cookie.split(";"); // Split cookies by semicolon
+        for (let i = 0; i < theCookies.length; i++) {
+            let cookie = theCookies[i].trim(); // Remove leading spaces
+            console.log("cookie is :",cookie);
+            if (cookie.startsWith("sessionId=")) {
+                return cookie.substring("sessionId=".length); // Get the value after "sessionId="
+            }
+        }
+        return null; // Return null if sessionId cookie is not found
+    }
+
+    let cookieValue = getCookieValue();
+    console.log("Value of the cookie: ", cookieValue);
+
+
+    async function fetchCookieValue() {
+
+       try {
+           const response = await fetch('http://localhost:8080/verificationSessionId', {
+               method: 'POST',
+               body: cookieValue
+           });
+
+           if (response.ok) {
+               const result = await response.json();
+                if (result.hasOwnProperty("Success")) {
+                console.log('File and data uploaded successfully:', result);
+                //Setting the cookie if the user is already registered
+               } else {
+                goto('/');
+                return
+               }
+           } else {
+               console.error('Cookie not valid');
+           }
+       } catch (error) {
+           console.error('Error with the cookie:', error);
+       }
+   }
+
+    fetchCookieValue()
     fetchUsers();
     fetchPosts()
     fetchComments()
     fetchAlbums();
     fetchPhotos();
+
 
     let previousUserId = null;
 
